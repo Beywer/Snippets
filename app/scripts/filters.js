@@ -9,16 +9,17 @@ export async function sobel(source, result = source) {
     const intense = await getIntense(source);
 
     console.log('Drawing grayscale image');
-    await fillBuffer(buffer, getGrayScalePixelColors(intense));
+    await fillBuffer(result, getGrayScalePixelColors(intense));
     result.getContext('2d').drawImage(buffer, 0, 0);
 
-    console.log('Calculating of image gradients');
+    console.log('Calculating of intense gradients');
     const gradients = await getGradients(intense);
-    console.log(gradients);
 
-    await delay(500);
+    console.log('Converting gradients into colors');
+    const gradientColors = await  getOriginalPixelColors(gradients, intense, source);
+
     console.log('Drawing gradient image');
-    await fillBuffer(buffer, await  getOriginalPixelColors(gradients, source));
+    await fillBuffer(result, gradientColors);
     result.getContext('2d').drawImage(buffer, 0, 0);
 }
 
@@ -104,7 +105,7 @@ function performMatrixOperations(operation, iMax, jMax) {
                     j++;
                     if (j >= jMax) {
                         clearInterval(intervalId);
-                        console.log(100);
+                        console.log('100 %');
                         return resolve();
                     }
                 }
@@ -115,12 +116,14 @@ function performMatrixOperations(operation, iMax, jMax) {
 
         function logPerformCompletePercent() {
             const percent = +((iMax * j + i) * 100 / (iMax * jMax)).toFixed(4);
-            console.log(percent);
+            if (percent % 5 < 0.2) {
+                console.log(percent.toFixed(0), '%');
+            }
         }
     });
 }
 
-function getOriginalPixelColors(matrix, sourceCanvas) {
+function getOriginalPixelColors(matrix, intense, sourceCanvas) {
     const iMax = sourceCanvas.width, jMax = sourceCanvas.height;
     const sourceCtx = sourceCanvas.getContext('2d');
     const colors = [];
@@ -128,10 +131,8 @@ function getOriginalPixelColors(matrix, sourceCanvas) {
     function getPixelColor(i, j) {
         if (!colors[i]) colors[i] = [];
         const pixel = sourceCtx.getImageData(i, j, 1, 1);
-        const pixelIntense = getRgbIntense(pixel.data[0], pixel.data[1], pixel.data[2]),
-            newIntense = matrix[i][j];
-        const newColor = mulColor(pixel.data[0], pixel.data[1], pixel.data[2], newIntense / pixelIntense);
-        colors[i][j] = newColor;
+        const pixelIntense = intense[i][j], newIntense = matrix[i][j];
+        colors[i][j] = mulColor(pixel.data[0], pixel.data[1], pixel.data[2], newIntense / pixelIntense);
     }
 
     return performMatrixOperations(getPixelColor, iMax, jMax)

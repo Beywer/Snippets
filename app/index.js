@@ -4,8 +4,9 @@ import {sobel} from 'scripts/filters';
 // import imgSrc from 'images/galaxy.jpg';
 // import imgSrc from 'images/kaylo.jpg';
 // import imgSrc from 'images/photo.jpg';
-import imgSrc from 'images/0f80c848822253.58b8002062615.jpg';
 // import imgSrc from 'images/photo.jpg';
+// import imgSrc from 'images/0f80c848822253.58b8002062615.jpg';
+import imgSrc from 'images/5.png';
 
 // const W = 1920, H = 1080;
 // const W = 1600, H = 900;
