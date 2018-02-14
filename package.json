@@ -1,0 +1,26 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "webpack-dev-server --hot",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.9",
+    "file-loader": "^1.1.6",
+    "path": "^0.12.7",
+    "style-loader": "^0.20.1",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
+}
